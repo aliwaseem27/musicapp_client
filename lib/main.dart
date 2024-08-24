@@ -1,10 +1,14 @@
 import 'package:client/core/theme/theme.dart';
-import 'package:client/features/auth/view/screens/login_screen.dart';
 import 'package:client/features/auth/view/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -15,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: AppTheme.darkThemeMode,
-      home: LoginScreen(),
+      home: SignupScreen(),
     );
   }
 }

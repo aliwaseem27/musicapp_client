@@ -1,16 +1,19 @@
 import 'package:client/core/theme/app_pallete.dart';
 import 'package:client/core/widgets/custom_field.dart';
+import 'package:client/features/auth/repositories/auth_remote_repository.dart';
+import 'package:client/features/auth/view/screens/login_screen.dart';
 import 'package:client/features/auth/view/widgets/auth_gradient_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SignupScreen extends StatefulWidget {
+class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _SignupScreenState extends ConsumerState<SignupScreen> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -61,11 +64,30 @@ class _SignupScreenState extends State<SignupScreen> {
               const SizedBox(height: 20),
               AuthGradientButton(
                 buttonText: 'Sign up',
-                onTap: () async {},
+                onTap: () async {
+                  final res = await AuthRemoteRepository().signup(
+                    name: nameController.text,
+                    email: emailController.text,
+                    password: passwordController.text,
+                  );
+                  print("sign up pressed");
+                  final val = res.fold(
+                    (l) => l,
+                    (r) => r,
+                  );
+                  print(val);
+                },
               ),
               const SizedBox(height: 20),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                  );
+                },
                 child: RichText(
                   text: TextSpan(
                     text: 'Already have an account? ',
@@ -81,7 +103,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
