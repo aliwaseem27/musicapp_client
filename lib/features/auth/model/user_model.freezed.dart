@@ -23,6 +23,7 @@ mixin _$UserModel {
   String get name => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
+  String get token => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,7 @@ abstract class $UserModelCopyWith<$Res> {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) then) =
       _$UserModelCopyWithImpl<$Res, UserModel>;
   @useResult
-  $Res call({String name, String email, String id});
+  $Res call({String name, String email, String id, String token});
 }
 
 /// @nodoc
@@ -54,6 +55,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? name = null,
     Object? email = null,
     Object? id = null,
+    Object? token = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -68,6 +70,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      token: null == token
+          ? _value.token
+          : token // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -80,7 +86,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
       __$$UserModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String name, String email, String id});
+  $Res call({String name, String email, String id, String token});
 }
 
 /// @nodoc
@@ -97,6 +103,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? name = null,
     Object? email = null,
     Object? id = null,
+    Object? token = null,
   }) {
     return _then(_$UserModelImpl(
       name: null == name
@@ -111,6 +118,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      token: null == token
+          ? _value.token
+          : token // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -119,7 +130,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserModelImpl implements _UserModel {
   const _$UserModelImpl(
-      {required this.name, required this.email, required this.id});
+      {required this.name,
+      required this.email,
+      required this.id,
+      this.token = ""});
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
@@ -130,10 +144,13 @@ class _$UserModelImpl implements _UserModel {
   final String email;
   @override
   final String id;
+  @override
+  @JsonKey()
+  final String token;
 
   @override
   String toString() {
-    return 'UserModel(name: $name, email: $email, id: $id)';
+    return 'UserModel(name: $name, email: $email, id: $id, token: $token)';
   }
 
   @override
@@ -143,12 +160,13 @@ class _$UserModelImpl implements _UserModel {
             other is _$UserModelImpl &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.id, id) || other.id == id));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.token, token) || other.token == token));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, name, email, id);
+  int get hashCode => Object.hash(runtimeType, name, email, id, token);
 
   @JsonKey(ignore: true)
   @override
@@ -168,7 +186,8 @@ abstract class _UserModel implements UserModel {
   const factory _UserModel(
       {required final String name,
       required final String email,
-      required final String id}) = _$UserModelImpl;
+      required final String id,
+      final String token}) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
@@ -179,6 +198,8 @@ abstract class _UserModel implements UserModel {
   String get email;
   @override
   String get id;
+  @override
+  String get token;
   @override
   @JsonKey(ignore: true)
   _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>

@@ -33,6 +33,7 @@ class AuthViewModel extends _$AuthViewModel {
         state = AsyncValue.data(right);
       },
     );
+    print(res);
   }
 
   Future<void> loginUser({
@@ -52,5 +53,6 @@ class AuthViewModel extends _$AuthViewModel {
         state = AsyncValue.data(right);
       },
     );
+    print(res);
   }
 }
