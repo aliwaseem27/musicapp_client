@@ -1,3 +1,4 @@
+import 'package:client/core/providers/current_user_notifier.dart';
 import 'package:client/features/auth/model/user_model.dart';
 import 'package:client/features/auth/repositories/auth_local_repository.dart';
 import 'package:client/features/auth/repositories/auth_remote_repository.dart';
@@ -9,11 +10,13 @@ part "auth_viewmodel.g.dart";
 class AuthViewModel extends _$AuthViewModel {
   late AuthRemoteRepository _authRemoteRepository;
   late AuthLocalRepository _authLocalRepository;
+  late CurrentUserNotifier _currentUserNotifier;
 
   @override
   AsyncValue<UserModel>? build() {
     _authRemoteRepository = ref.watch(authRemoteRepositoryProvider);
     _authLocalRepository = ref.watch(authLocalRepositoryProvider);
+    _currentUserNotifier = ref.watch(currentUserNotifierProvider.notifier);
     return null;
   }
 
@@ -33,11 +36,11 @@ class AuthViewModel extends _$AuthViewModel {
       password: password,
     );
     res.fold(
-      (left) {
-        state = AsyncValue.error(left.message, StackTrace.current);
+      (failure) {
+        state = AsyncValue.error(failure.message, StackTrace.current);
       },
-      (right) {
-        state = AsyncValue.data(right);
+      (user) {
+        state = AsyncValue.data(user);
       },
     );
     print(res);
@@ -53,14 +56,42 @@ class AuthViewModel extends _$AuthViewModel {
       password: password,
     );
     res.fold(
-      (left) {
-        state = AsyncValue.error(left.message, StackTrace.current);
+      (failure) {
+        state = AsyncValue.error(failure.message, StackTrace.current);
       },
-      (right) {
-        _authLocalRepository.setToken(right.token);
-        state = AsyncValue.data(right);
+      (user) {
+        _authLocalRepository.setToken(user.token);
+        _currentUserNotifier.addUser(user);
+        state = AsyncValue.data(user);
       },
     );
     print(res);
+  }
+
+  Future<UserModel?> getData() async {
+    state = const AsyncValue.loading();
+    final token = _authLocalRepository.getToken();
+    if (token != null) {
+      final res = await _authRemoteRepository.getCurrentUserData(token);
+      // final val = switch (res) {
+      //   Left(value: final left) => state = AsyncValue.error(left.message, StackTrace.current),
+      //   Right(value: final right) => state = AsyncValue.data(right),
+      // };
+      // return val.value;
+
+      res.fold(
+        (failure) {
+          state = AsyncValue.error(failure.message, StackTrace.current);
+          return null;
+        },
+        (user) {
+          state = AsyncValue.data(user);
+          _currentUserNotifier.addUser(user);
+          return user;
+        },
+      );
+    }
+
+    return null;
   }
 }
