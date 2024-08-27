@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Permissions added by the user -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- End Permissions added by the user -->
     <application
         android:label="client"
         android:name="${applicationName}"
